@@ -13,44 +13,74 @@ export default function Navbar() {
   const [scrolled, setScrolled]     = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [active, setActive]         = useState('')
-  const [scrollPct, setScrollPct]   = useState(0)
+  const progressRef                 = useRef(null)
+  const scrolledRef                 = useRef(false)
 
+  // Scroll progress — direct DOM write, zero React re-renders per scroll pixel
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY
-      setScrolled(y > 60)
-
-      // Scroll progress
+      const y     = window.scrollY
       const total = document.documentElement.scrollHeight - window.innerHeight
-      setScrollPct(total > 0 ? (y / total) * 100 : 0)
 
-      // Active section
-      const ids = navLinks.map(l => l.href.slice(1))
-      for (const id of [...ids].reverse()) {
-        const el = document.getElementById(id)
-        if (el && y >= el.offsetTop - 160) { setActive(id); break }
+      if (progressRef.current) {
+        progressRef.current.style.width = total > 0 ? `${(y / total) * 100}%` : '0%'
+      }
+
+      // Only setState when actually crossing the threshold, not every pixel
+      const nowScrolled = y > 60
+      if (nowScrolled !== scrolledRef.current) {
+        scrolledRef.current = nowScrolled
+        setScrolled(nowScrolled)
       }
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // IntersectionObserver — fires the instant a section enters the viewport,
+  // no scroll events involved, no offset guessing, no lag
+  useEffect(() => {
+    const ids = navLinks.map(l => l.href.slice(1))
+
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id)
+        }
+      },
+      // Zone: from 5% to 40% from the top of the viewport.
+      // A section becomes active as its top edge enters this band.
+      { rootMargin: '-5% 0px -60% 0px', threshold: 0 }
+    )
+
+    ids.forEach(id => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  // window.scrollTo is intercepted by Lenis for buttery smooth scrolling
   const scrollTo = href => {
     setMobileOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    const el = document.querySelector(href)
+    if (el) window.scrollTo({ top: el.offsetTop, behavior: 'smooth' })
   }
 
   return (
     <>
-      {/* Scroll progress bar */}
-      <motion.div
-        className="fixed top-0 left-0 z-[110] h-[2px] origin-left"
+      {/* Scroll progress bar — plain div, width updated by ref, no re-renders */}
+      <div
+        ref={progressRef}
+        className="fixed top-0 left-0 z-[110] h-[2px]"
         style={{
-          width: `${scrollPct}%`,
+          width: '0%',
           background: 'linear-gradient(90deg, #06b6d4, #8b5cf6)',
           boxShadow: '0 0 8px rgba(6,182,212,0.7)',
+          willChange: 'width',
         }}
-        transition={{ ease: 'linear' }}
       />
 
       <motion.nav

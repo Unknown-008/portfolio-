@@ -69,13 +69,13 @@ function CentralArtifact() {
       </mesh>
 
       {/* Glowing distorted core — bloom source */}
-      <Sphere ref={coreRef} args={[0.85, 128, 128]}>
+      <Sphere ref={coreRef} args={[0.85, 48, 48]}>
         <MeshDistortMaterial
           color="#06b6d4"
           emissive="#0e7490"
           emissiveIntensity={6}
-          distort={0.55}
-          speed={2.5}
+          distort={0.45}
+          speed={1.5}
           roughness={0}
           metalness={1}
           toneMapped={false}
@@ -155,7 +155,6 @@ function TechOrb({ offset, speed, orbitR, color, yBias = 0 }) {
       <Sphere args={[0.26, 6, 6]}>
         <meshBasicMaterial color={color} transparent opacity={0.06} />
       </Sphere>
-      <pointLight color={color} intensity={1.2} distance={2.5} />
     </group>
   )
 }
@@ -213,7 +212,7 @@ function Scene() {
       <directionalLight position={[5, 8, 5]}   color="#22d3ee" intensity={0.4} />
       <directionalLight position={[-5, -4, -5]} color="#a855f7" intensity={0.3} />
 
-      <Stars radius={70} depth={40} count={5000} factor={3.5} saturation={0} fade speed={0.4} />
+      <Stars radius={70} depth={40} count={2500} factor={3.5} saturation={0} fade speed={0.4} />
       <ParticleCloud />
 
       {/* Grid floor */}
@@ -237,7 +236,7 @@ function Scene() {
       <MouseCamera />
 
       <EffectComposer disableNormalPass>
-        <Bloom intensity={2.2} luminanceThreshold={0.08} luminanceSmoothing={0.92} mipmapBlur />
+        <Bloom intensity={1.8} luminanceThreshold={0.18} luminanceSmoothing={0.85} mipmapBlur />
         <Vignette offset={0.25} darkness={0.55} />
       </EffectComposer>
     </>
@@ -307,6 +306,7 @@ export default function Hero() {
         <Canvas
           gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
           camera={{ fov: 58, near: 0.1, far: 120 }}
+          dpr={[1, 1.5]}
           style={{ background: 'transparent' }}
         >
           <Suspense fallback={null}>

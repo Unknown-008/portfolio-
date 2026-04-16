@@ -6,15 +6,16 @@ import { RevealWords } from '../components/SplitText'
 const projects = [
   {
     id: 1,
-    title: 'ERP Software — M21',
+    title: 'College ERP — SD College',
     category: 'Enterprise',
-    description: 'A powerful ERP system rivaling Tally with advanced accounting, inventory, payroll, and GST billing for enterprises.',
-    longDesc: 'Built a full-featured Enterprise Resource Planning system covering multi-entity accounting, GST billing, inventory management, payroll processing, and comprehensive financial reporting. Includes role-based access control and audit trails.',
+    description: 'Full-featured college ERP system for SD College Muzaffarnagar managing students, attendance, fees, and academics.',
+    longDesc: 'Developed a comprehensive ERP platform for SD College Muzaffarnagar. Covers student enrollment, attendance tracking, fee management, exam scheduling, result processing, and admin dashboards — streamlining day-to-day college operations.',
     tech: ['.NET Core MVC', 'C#', 'SQL Server', 'JavaScript'],
     color: '#8b5cf6',
-    icon: '🏢',
+    icon: '🎓',
     number: '01',
-    features: ['Multi-entity Accounting', 'GST Billing', 'Inventory Management', 'Role-Based Access'],
+    link: 'https://erp.sdcollegemzn.in',
+    features: ['Student Management', 'Attendance Tracking', 'Fee Management', 'Exam & Results'],
   },
   {
     id: 2,
@@ -63,6 +64,19 @@ const projects = [
     icon: '🛒',
     number: '05',
     features: ['Product Listings', 'Real-time Chat', 'Order Tracking', 'Push Notifications'],
+  },
+  {
+    id: 6,
+    title: 'Good Ventures',
+    category: 'Web App',
+    description: 'Modern business web platform for Good Ventures — built for performance, clean UX, and real-world scale.',
+    longDesc: 'Designed and developed the Good Ventures web platform from the ground up. Focused on fast load times, responsive design, and a polished user experience that reflects the brand identity.',
+    tech: ['React.js', 'Node.js', 'JavaScript', 'Tailwind CSS'],
+    color: '#10b981',
+    icon: '🚀',
+    number: '06',
+    link: 'https://goodventures.in',
+    features: ['Responsive Design', 'Fast Performance', 'Clean UI', 'SEO Optimized'],
   },
 ]
 
@@ -167,15 +181,30 @@ function ProjectCard({ project, index, onClick }) {
           </div>
         </div>
 
-        {/* Arrow on hover */}
-        <motion.div
-          className="absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          style={{ background: `${project.color}18`, border: `1px solid ${project.color}35` }}
-        >
-          <svg className="w-3.5 h-3.5" style={{ color: project.color }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-          </svg>
-        </motion.div>
+        {/* Arrow / live link on hover */}
+        {project.link ? (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            className="absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{ background: `${project.color}18`, border: `1px solid ${project.color}35` }}
+          >
+            <svg className="w-3.5 h-3.5" style={{ color: project.color }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        ) : (
+          <motion.div
+            className="absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{ background: `${project.color}18`, border: `1px solid ${project.color}35` }}
+          >
+            <svg className="w-3.5 h-3.5" style={{ color: project.color }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+            </svg>
+          </motion.div>
+        )}
 
         {/* Hover glow */}
         <div
@@ -265,6 +294,27 @@ function Modal({ project, onClose }) {
               ))}
             </div>
           </div>
+
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 flex items-center justify-center gap-2 py-2.5 rounded-xl font-mono text-sm transition-all"
+              style={{
+                color: project.color,
+                border: `1px solid ${project.color}35`,
+                background: `${project.color}08`,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = `${project.color}15` }}
+              onMouseLeave={e => { e.currentTarget.style.background = `${project.color}08` }}
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Visit Live Site
+            </a>
+          )}
         </div>
       </motion.div>
     </motion.div>

@@ -24,6 +24,7 @@ const categories = [
     skills: [
       { name: '.NET Core MVC', level: 88 },
       { name: 'C#',            level: 86 },
+      { name: 'Node.js',       level: 78 },
       { name: 'REST APIs',     level: 90 },
     ],
   },
@@ -42,7 +43,7 @@ const categories = [
 
 // Marquee rows — three rows, alternating direction
 const marqueeRows = [
-  ['React Native', 'React.js', 'JavaScript', '.NET Core MVC', 'C#', 'REST APIs', 'Firebase', 'Git', 'SQL', 'Tailwind CSS', 'HTML5', 'CSS3'],
+  ['React Native', 'React.js', 'JavaScript', '.NET Core MVC', 'C#', 'Node.js', 'REST APIs', 'Firebase', 'Git', 'SQL', 'Tailwind CSS', 'HTML5', 'CSS3'],
   ['TypeScript', 'Node.js', 'Redux', 'Entity Framework', 'Blazor', 'Expo', 'MobX', 'SignalR', 'Azure', 'PostgreSQL', 'SQLite', 'Postman'],
   ['VS Code', 'Figma', 'GitHub', 'Firebase Auth', 'FCM Push', 'Bluetooth LE', 'PDF Generation', 'ERP Systems', 'Agile', 'Clean Arch', 'MVVM', 'MVC'],
 ]

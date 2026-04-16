@@ -6,7 +6,7 @@ import { RevealWords } from '../components/SplitText'
 import MagneticButton from '../components/MagneticButton'
 
 // ── EmailJS credentials — fill these in after setup ──────────────────────────
-const EMAILJS_SERVICE_ID  = 'service_92dsbzw'
+const EMAILJS_SERVICE_ID  = 'service_mcnvvwr'
 const EMAILJS_TEMPLATE_ID = 'template_jtni3fe'
 const EMAILJS_PUBLIC_KEY  = 'rqdhxaWXexhwAv46T'
 // ─────────────────────────────────────────────────────────────────────────────
