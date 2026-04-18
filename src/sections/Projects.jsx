@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
 import { RevealWords } from '../components/SplitText'
 
 const projects = [
@@ -82,7 +81,6 @@ const projects = [
 
 // ─── Tilt + Magnetic card ─────────────────────────────────────────────────────
 function ProjectCard({ project, index, onClick }) {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 })
   const cardRef = useRef(null)
 
   const onMouseMove = e => {
@@ -99,10 +97,10 @@ function ProjectCard({ project, index, onClick }) {
 
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 48 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.09, ease: [0.22, 1, 0.36, 1] }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.7, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
     >
       <div
         ref={cardRef}
@@ -324,7 +322,6 @@ function Modal({ project, onClose }) {
 // ─── Section ──────────────────────────────────────────────────────────────────
 export default function Projects() {
   const [selected, setSelected] = useState(null)
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
     <section id="projects" className="relative py-32 overflow-hidden" style={{ background: '#0c1220' }}>
@@ -334,12 +331,13 @@ export default function Projects() {
         style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 70%)', filter: 'blur(80px)' }}
       />
 
-      <div ref={ref} className="relative max-w-7xl mx-auto px-6 lg:px-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-16">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
@@ -349,8 +347,9 @@ export default function Projects() {
           </h2>
           <motion.p
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.45 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ delay: 0.3 }}
             className="font-mono text-slate-600 text-xs mt-3"
           >
             // Click any card for full details

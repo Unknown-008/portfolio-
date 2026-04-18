@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
 import emailjs from '@emailjs/browser'
 import { RevealWords } from '../components/SplitText'
 import MagneticButton from '../components/MagneticButton'
@@ -51,7 +50,6 @@ const socials = [
 ]
 
 export default function Contact() {
-  const [ref, inView]   = useInView({ triggerOnce: true, threshold: 0.08 })
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [status, setSt] = useState('idle') // 'idle' | 'sending' | 'sent' | 'error'
   const formRef         = useRef(null)
@@ -87,12 +85,13 @@ export default function Contact() {
       <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
 
-      <div ref={ref} className="relative max-w-7xl mx-auto px-6 lg:px-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-16">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
@@ -102,8 +101,9 @@ export default function Contact() {
           </h2>
           <motion.p
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ delay: 0.3 }}
             className="text-slate-500 mt-3 text-sm max-w-md mx-auto"
           >
             Open to freelance projects, full-time roles, and interesting collaborations.
@@ -115,8 +115,9 @@ export default function Contact() {
           {/* ── Left col (2/5) ── */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-2"
           >
             <p className="text-slate-400 leading-relaxed mb-8 text-sm">
@@ -130,7 +131,7 @@ export default function Contact() {
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, x: -16 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.05 }}
                   transition={{ delay: 0.35 + i * 0.1 }}
                 >
                   <MagneticButton strength={0.2}>
@@ -164,7 +165,7 @@ export default function Contact() {
             {/* Availability badge */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }}
               transition={{ delay: 0.7 }}
               className="flex items-center gap-3 p-4 rounded-xl"
               style={{ background: 'rgba(34,197,94,0.04)', border: '1px solid rgba(34,197,94,0.12)' }}
@@ -180,7 +181,7 @@ export default function Contact() {
           {/* ── Right col (3/5) — Form ── */}
           <motion.div
             initial={{ opacity: 0, x: 28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.7, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-3"
           >

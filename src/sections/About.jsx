@@ -39,9 +39,9 @@ const highlights = [
   { label: 'IoT Integration',     desc: 'Bluetooth device configuration & firmware',      color: '#f97316' },
 ]
 
-export default function About() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 })
+const VP = { once: true, amount: 0.05 }
 
+export default function About() {
   return (
     <section
       id="about"
@@ -55,12 +55,13 @@ export default function About() {
         style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }}
       />
 
-      <div ref={ref} className="relative max-w-7xl mx-auto px-6 lg:px-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-16">
 
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
@@ -75,8 +76,9 @@ export default function About() {
           {/* ── Left ── */}
           <motion.div
             initial={{ opacity: 0, x: -32 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Terminal code block */}
             <div
@@ -99,12 +101,13 @@ export default function About() {
                   ['experience', '"2+ years"'],
                   ['location',   '"India 🇮🇳"'],
                   ['status',     '"Open to Work ✓"'],
-                ].map(([key, val]) => (
+                ].map(([key, val], idx) => (
                   <motion.div
                     key={key}
                     initial={{ opacity: 0, x: -12 }}
-                    animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.4 + ['name','role','experience','location','status'].indexOf(key) * 0.08 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={VP}
+                    transition={{ delay: 0.2 + idx * 0.07 }}
                     className="pl-5"
                   >
                     <span className="text-slate-500">{key}</span>
@@ -127,8 +130,9 @@ export default function About() {
                 <motion.p
                   key={i}
                   initial={{ opacity: 0, y: 12 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.5 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VP}
+                  transition={{ delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 >
                   {para}
                 </motion.p>
@@ -138,8 +142,9 @@ export default function About() {
             <motion.button
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.85 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VP}
+              transition={{ delay: 0.35 }}
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
               className="btn-primary"
@@ -159,8 +164,9 @@ export default function About() {
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, y: 24, scale: 0.95 }}
-                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                  transition={{ duration: 0.5, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={VP}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   className="glass p-5 text-center gradient-border-wrap glass-hover"
                   style={{ border: '1px solid rgba(255,255,255,0.06)' }}
                 >
@@ -179,12 +185,12 @@ export default function About() {
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, x: 24 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.55, delay: 0.35 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={VP}
+                  transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   className="flex items-center gap-4 glass p-4 glass-hover group"
                   style={{ border: '1px solid rgba(255,255,255,0.05)' }}
                 >
-                  {/* Color accent */}
                   <div
                     className="w-1 h-10 rounded-full flex-shrink-0 transition-all duration-300 group-hover:h-12"
                     style={{ background: color, boxShadow: `0 0 12px ${color}50` }}

@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
 import MarqueeText from '../components/MarqueeText'
 import { RevealWords } from '../components/SplitText'
 
@@ -41,14 +40,14 @@ const categories = [
   },
 ]
 
-// Marquee rows — three rows, alternating direction
 const marqueeRows = [
   ['React Native', 'React.js', 'JavaScript', '.NET Core MVC', 'C#', 'Node.js', 'REST APIs', 'Firebase', 'Git', 'SQL', 'Tailwind CSS', 'HTML5', 'CSS3'],
   ['TypeScript', 'Node.js', 'Redux', 'Entity Framework', 'Blazor', 'Expo', 'MobX', 'SignalR', 'Azure', 'PostgreSQL', 'SQLite', 'Postman'],
   ['VS Code', 'Figma', 'GitHub', 'Firebase Auth', 'FCM Push', 'Bluetooth LE', 'PDF Generation', 'ERP Systems', 'Agile', 'Clean Arch', 'MVVM', 'MVC'],
 ]
 
-// Tilt card with perspective + spring
+const VP = { once: true, amount: 0.05 }
+
 function TiltCard({ children, className = '', style = {} }) {
   const ref = useRef(null)
 
@@ -77,11 +76,9 @@ function TiltCard({ children, className = '', style = {} }) {
   )
 }
 
-// Animated skill bar
 function SkillBar({ name, level, color, delay }) {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.4 })
   return (
-    <div ref={ref} className="mb-4 last:mb-0">
+    <div className="mb-4 last:mb-0">
       <div className="flex justify-between mb-1.5">
         <span className="font-mono text-xs text-slate-300">{name}</span>
         <span className="font-mono text-xs text-slate-600">{level}%</span>
@@ -89,7 +86,8 @@ function SkillBar({ name, level, color, delay }) {
       <div className="h-1 bg-slate-800/80 rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
-          animate={inView ? { width: `${level}%` } : {}}
+          whileInView={{ width: `${level}%` }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 1.1, delay, ease: [0.22, 1, 0.36, 1] }}
           className="h-full rounded-full"
           style={{ background: `linear-gradient(90deg, ${color}, ${color}70)`, boxShadow: `0 0 8px ${color}50` }}
@@ -100,8 +98,6 @@ function SkillBar({ name, level, color, delay }) {
 }
 
 export default function Skills() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
-
   return (
     <section id="skills" className="relative py-32 overflow-hidden" style={{ background: '#0f172a' }}>
       {/* Glows */}
@@ -110,12 +106,13 @@ export default function Skills() {
       <div className="absolute bottom-0 right-1/3 w-96 h-96 rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
 
-      <div ref={ref} className="max-w-7xl mx-auto px-6 lg:px-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
@@ -125,8 +122,9 @@ export default function Skills() {
           </h2>
           <motion.p
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4 }}
+            whileInView={{ opacity: 1 }}
+            viewport={VP}
+            transition={{ delay: 0.3 }}
             className="font-mono text-slate-600 text-xs mt-3"
           >
             // Technologies I work with daily
@@ -136,8 +134,9 @@ export default function Skills() {
         {/* ── Marquee rows ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ delay: 0.2 }}
           className="mb-20 space-y-3 select-none"
         >
           {marqueeRows.map((row, ri) => (
@@ -169,19 +168,18 @@ export default function Skills() {
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 36 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.65, delay: 0.15 + ci * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VP}
+              transition={{ duration: 0.65, delay: ci * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <TiltCard
                 className="glass glow-pulse h-full"
                 style={{ border: `1px solid ${color}15` }}
               >
-                {/* Top gradient line */}
                 <div className="h-[2px] w-full rounded-t-2xl"
                   style={{ background: `linear-gradient(90deg, ${color}, ${color}30)` }} />
 
                 <div className="p-6">
-                  {/* Card header */}
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/50">
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
@@ -201,13 +199,12 @@ export default function Skills() {
                     />
                   </div>
 
-                  {/* Skill bars */}
                   {skills.map((skill, si) => (
                     <SkillBar
                       key={skill.name}
                       {...skill}
                       color={color}
-                      delay={0.2 + ci * 0.12 + si * 0.07}
+                      delay={ci * 0.1 + si * 0.07}
                     />
                   ))}
                 </div>

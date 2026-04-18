@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Lenis from 'lenis'
 
 import LoadingScreen from './components/LoadingScreen'
-import CustomCursor from './components/CustomCursor'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
@@ -37,11 +36,11 @@ export default function App() {
     if (loading) return
 
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: 0.9,
       easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 2.0,
     })
 
     let rafId
@@ -60,9 +59,7 @@ export default function App() {
   return (
     <>
       <div className="noise-overlay" />
-      <CustomCursor />
-
-      <AnimatePresence mode="wait">
+<AnimatePresence mode="wait">
         {loading ? (
           <LoadingScreen key="loading" progress={Math.min(progress, 100)} />
         ) : (

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
 import { RevealWords } from '../components/SplitText'
 
 const milestones = [
@@ -25,20 +24,21 @@ const responsibilities = [
 
 const techUsed = ['React Native', '.NET Core', 'C#', 'JavaScript', 'Firebase', 'SQL', 'REST APIs', 'Git']
 
-function TimelineItem({ milestone, index, inView }) {
+const VP = { once: true, amount: 0.05 }
+
+function TimelineItem({ milestone, index }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: 0.15 + index * 0.09, ease: [0.22, 1, 0.36, 1] }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={VP}
+      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
       className="relative pl-10"
     >
-      {/* Dot */}
       <div
         className="timeline-dot"
         style={{ top: 10, borderColor: milestone.color, boxShadow: `0 0 12px ${milestone.color}60` }}
       />
-
       <div
         className="glass p-4 glass-hover"
         style={{ border: '1px solid rgba(255,255,255,0.05)' }}
@@ -62,8 +62,6 @@ function TimelineItem({ milestone, index, inView }) {
 }
 
 export default function Experience() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
-
   return (
     <section id="experience" className="relative py-32 overflow-hidden" style={{ background: '#0f172a' }}>
       <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
@@ -72,12 +70,13 @@ export default function Experience() {
         style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }}
       />
 
-      <div ref={ref} className="relative max-w-7xl mx-auto px-6 lg:px-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-16">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
@@ -92,8 +91,9 @@ export default function Experience() {
           {/* ── Left: Main card ── */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <div
               className="glass overflow-hidden"
@@ -102,7 +102,6 @@ export default function Experience() {
               <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, #06b6d4, #8b5cf6)' }} />
 
               <div className="p-8">
-                {/* Role header */}
                 <div className="flex items-start justify-between gap-4 mb-8 pb-6 border-b border-slate-800/50">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
@@ -130,7 +129,6 @@ export default function Experience() {
                   </div>
                 </div>
 
-                {/* Responsibilities */}
                 <div className="mb-8">
                   <h4 className="font-mono text-[10px] uppercase tracking-widest text-slate-600 mb-4">What I Do</h4>
                   <div className="grid sm:grid-cols-2 gap-2.5">
@@ -138,8 +136,9 @@ export default function Experience() {
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -8 }}
-                        animate={inView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.3 + i * 0.06 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={VP}
+                        transition={{ delay: i * 0.05 }}
                         className="flex items-start gap-2.5 text-xs"
                       >
                         <div className="w-1 h-1 rounded-full bg-cyan-600 mt-1.5 flex-shrink-0" />
@@ -149,7 +148,6 @@ export default function Experience() {
                   </div>
                 </div>
 
-                {/* Tech */}
                 <div>
                   <h4 className="font-mono text-[10px] uppercase tracking-widest text-slate-600 mb-3">Tech Used</h4>
                   <div className="flex flex-wrap gap-2">
@@ -157,8 +155,9 @@ export default function Experience() {
                       <motion.span
                         key={t}
                         initial={{ opacity: 0, scale: 0.85 }}
-                        animate={inView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ delay: 0.6 + i * 0.05 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={VP}
+                        transition={{ delay: i * 0.04 }}
                         className="font-mono text-xs px-3 py-1.5 rounded-lg text-cyan-400"
                         style={{ background: 'rgba(6,182,212,0.08)', border: '1px solid rgba(6,182,212,0.2)' }}
                       >
@@ -175,7 +174,8 @@ export default function Experience() {
           <div>
             <motion.p
               initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
+              whileInView={{ opacity: 1 }}
+              viewport={VP}
               className="font-mono text-[10px] uppercase tracking-widest text-slate-600 mb-6"
             >
               // Career timeline
@@ -185,7 +185,7 @@ export default function Experience() {
               <div className="timeline-line" />
               <div className="space-y-4">
                 {milestones.map((m, i) => (
-                  <TimelineItem key={i} milestone={m} index={i} inView={inView} />
+                  <TimelineItem key={i} milestone={m} index={i} />
                 ))}
               </div>
             </div>

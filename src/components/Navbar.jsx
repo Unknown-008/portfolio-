@@ -89,9 +89,9 @@ export default function Navbar() {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-0 left-0 right-0 z-[100] transition-all duration-500"
         style={scrolled ? {
-          background: 'rgba(10,15,30,0.88)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          background: 'rgba(10,15,30,0.92)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           padding: '12px 0',
         } : { padding: '20px 0' }}
@@ -180,7 +180,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[98]"
-              style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+              style={{ background: 'rgba(0,0,0,0.5)' }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
@@ -191,7 +191,7 @@ export default function Navbar() {
               className="fixed right-0 top-0 bottom-0 z-[99] w-72 flex flex-col pt-24 pb-8 px-6"
               style={{
                 background: 'rgba(10,15,30,0.97)',
-                backdropFilter: 'blur(24px)',
+                backdropFilter: 'blur(10px)',
                 borderLeft: '1px solid rgba(6,182,212,0.1)',
               }}
             >

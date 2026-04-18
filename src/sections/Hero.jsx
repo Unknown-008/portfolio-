@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, Suspense, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Stars, Sphere, MeshDistortMaterial } from '@react-three/drei'
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
+import { Stars, Sphere } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { motion } from 'framer-motion'
 import * as THREE from 'three'
 
@@ -68,16 +68,14 @@ function CentralArtifact() {
         <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.35} toneMapped={false} />
       </mesh>
 
-      {/* Glowing distorted core — bloom source */}
-      <Sphere ref={coreRef} args={[0.85, 48, 48]}>
-        <MeshDistortMaterial
+      {/* Glowing core */}
+      <Sphere ref={coreRef} args={[0.85, 16, 16]}>
+        <meshStandardMaterial
           color="#06b6d4"
           emissive="#0e7490"
-          emissiveIntensity={6}
-          distort={0.45}
-          speed={1.5}
-          roughness={0}
-          metalness={1}
+          emissiveIntensity={2}
+          roughness={0.1}
+          metalness={0.9}
           toneMapped={false}
         />
       </Sphere>
@@ -97,7 +95,7 @@ function CentralArtifact() {
 }
 
 // ─── Orbit Ring (particle-based) ─────────────────────────────────────────────
-function OrbitRing({ radius, speed, count = 220, color, rotation }) {
+function OrbitRing({ radius, speed, count = 60, color, rotation }) {
   const ref = useRef()
 
   const positions = useMemo(() => {
@@ -162,7 +160,7 @@ function TechOrb({ offset, speed, orbitR, color, yBias = 0 }) {
 // ─── Ambient Particle Cloud ───────────────────────────────────────────────────
 function ParticleCloud() {
   const ref = useRef()
-  const count = 2800
+  const count = 700
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -212,7 +210,7 @@ function Scene() {
       <directionalLight position={[5, 8, 5]}   color="#22d3ee" intensity={0.4} />
       <directionalLight position={[-5, -4, -5]} color="#a855f7" intensity={0.3} />
 
-      <Stars radius={70} depth={40} count={2500} factor={3.5} saturation={0} fade speed={0.4} />
+      <Stars radius={70} depth={40} count={500} factor={3.5} saturation={0} fade speed={0.4} />
       <ParticleCloud />
 
       {/* Grid floor */}
@@ -226,18 +224,14 @@ function Scene() {
       <OrbitRing radius={2.5} speed={0.38}  color="#22d3ee" rotation={[Math.PI / 2.5, 0.1, 0]} />
 
       {/* Floating tech orbs */}
-      <TechOrb offset={0}             speed={0.35} orbitR={3.8} color="#61dafb" yBias={0.5}  />
-      <TechOrb offset={Math.PI / 3}   speed={0.5}  orbitR={3.0} color="#f7df1e" yBias={-0.5} />
-      <TechOrb offset={Math.PI * 0.7} speed={0.28} orbitR={4.5} color="#a855f7" yBias={1.0}  />
-      <TechOrb offset={Math.PI}       speed={0.6}  orbitR={2.8} color="#f97316" yBias={-1.0} />
-      <TechOrb offset={Math.PI * 1.4} speed={0.32} orbitR={4.2} color="#06b6d4" yBias={0.3}  />
-      <TechOrb offset={Math.PI * 1.7} speed={0.44} orbitR={3.5} color="#f05032" yBias={-0.3} />
+      <TechOrb offset={0}           speed={0.35} orbitR={3.8} color="#61dafb" yBias={0.5}  />
+      <TechOrb offset={Math.PI / 3} speed={0.5}  orbitR={3.0} color="#f7df1e" yBias={-0.5} />
+      <TechOrb offset={Math.PI}     speed={0.28} orbitR={4.5} color="#a855f7" yBias={1.0}  />
 
       <MouseCamera />
 
       <EffectComposer disableNormalPass>
-        <Bloom intensity={1.8} luminanceThreshold={0.18} luminanceSmoothing={0.85} mipmapBlur />
-        <Vignette offset={0.25} darkness={0.55} />
+        <Bloom intensity={0.7} luminanceThreshold={0.55} luminanceSmoothing={0.9} />
       </EffectComposer>
     </>
   )
@@ -295,8 +289,23 @@ function RevealWords({ text, className, delay = 0, stagger = 0.1 }) {
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 export default function Hero() {
+  const sectionRef = useRef(null)
+  const [frameloop, setFrameloop] = useState('always')
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setFrameloop(entry.isIntersecting ? 'always' : 'demand'),
+      { threshold: 0 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative w-full min-h-screen flex items-center overflow-hidden"
       style={{ background: 'var(--color-bg)' }}
@@ -304,9 +313,10 @@ export default function Hero() {
       {/* 3D Canvas */}
       <div className="absolute inset-0 z-0">
         <Canvas
-          gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+          frameloop={frameloop}
+          gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
           camera={{ fov: 58, near: 0.1, far: 120 }}
-          dpr={[1, 1.5]}
+          dpr={1}
           style={{ background: 'transparent' }}
         >
           <Suspense fallback={null}>
