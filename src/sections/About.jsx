@@ -96,7 +96,7 @@ export default function About() {
               <div className="p-5 font-mono text-sm space-y-1.5">
                 <div><span className="text-purple-400">const</span> <span className="text-cyan-400">me</span> <span className="text-slate-500">=</span> {'{'}</div>
                 {[
-                  ['name',       '"Krishna Garg"'],
+                  ['name',       '"Krishna Testing"'],
                   ['role',       '"Software Developer"'],
                   ['experience', '"2+ years"'],
                   ['location',   '"India 🇮🇳"'],
