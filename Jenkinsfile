@@ -10,7 +10,7 @@ pipeline {
                 dir('/var/www/avennyx/client') {
 
                     sh 'git pull origin main'
-                    sh 'npm install --legacy-peer-deps'
+                    // sh 'npm install --legacy-peer-deps'
                     sh 'npm run build'
 
                     sh 'rm -rf /var/www/html/*'
