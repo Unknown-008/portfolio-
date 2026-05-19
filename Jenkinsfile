@@ -14,7 +14,7 @@ pipeline {
                     sh 'npm run build'
 
                     sh 'rm -rf /var/www/html/*'
-                    sh 'cp -r build/* /var/www/html/'
+                    sh 'cp -r dist/* /var/www/html/'
                 }
             }
         }
