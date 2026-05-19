@@ -13,8 +13,8 @@ pipeline {
                     sh 'npm install --legacy-peer-deps'
                     sh 'npm run build'
 
-                    sh 'sudo rm -rf /var/www/html/*'
-                    sh 'sudo cp -r build/* /var/www/html/'
+                    sh 'rm -rf /var/www/html/*'
+                    sh 'cp -r build/* /var/www/html/'
                 }
             }
         }
